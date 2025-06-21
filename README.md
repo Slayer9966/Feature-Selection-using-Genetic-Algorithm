@@ -39,7 +39,7 @@
 ### ✅ Clone the Repository
 ```bash
 git clone https://github.com/Slayer9966/Feature-Selection-using-Genetic-Algorithm.git
-cd genetic-feature-selection
+Feature-Selection-using-Genetic-Algorithm
 ```
 
 ---
