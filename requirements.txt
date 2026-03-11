@@ -1,4 +1,7 @@
-pandas 
-scikit-learn 
-deap 
+fastapi
+uvicorn
+pandas
 numpy
+scikit-learn
+deap
+python-multipart
