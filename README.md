@@ -1,168 +1,134 @@
-# 🧬 Genetic Algorithm Feature Selection - ML Optimizer
-**Genetic Algorithm Feature Selection** is an intelligent feature selection tool that uses evolutionary computation to automatically optimize feature subsets for machine learning models. Built with Python and DEAP, it combines correlation analysis with genetic algorithms to find the best features while reducing multicollinearity.
+Here is the updated README, following your specific format while integrating the advanced "Pro" logic we implemented. It highlights the hybrid relevance, ruthless pruning, and the specialized tech stack you've built.
+
+---
+
+# 🧬 GeneticFS Engine Pro - Hybrid ML Optimizer
+
+**GeneticFS Engine Pro** is an advanced feature selection framework that uses evolutionary computation to prune high-dimensional datasets. Unlike standard selectors, this engine uses a **Hybrid Fitness Function** that combines non-linear statistical analysis with model-based importance to eliminate noise and redundancy.
 
 ---
 
 ## 🚀 Features
 
-### 🎯 Intelligent Feature Selection
-- Automatic feature subset optimization using genetic algorithms
-- Correlation-based fitness evaluation with target variable
-- Multicollinearity penalty to avoid redundant features
-- Support for both numerical and categorical variables
+### 🎯 Hybrid Relevance Scoring
 
-### 🔄 Advanced Preprocessing
-- Automatic target encoding for categorical variables
-- Missing value handling with intelligent imputation
-- Data cleaning with column name standardization
-- Train-test split generation for model validation
+* **Spearman Rank Correlation:** Captures non-linear rank relationships that standard Pearson correlation misses.
+* **Random Forest Importance:** Uses model-driven Gini impurity (Classification) or MSE (Regression) to find true predictive power.
+* **Weighted Integration:** Uses a 60/40 weighted split favoring Random Forest for smarter, more reliable selection.
 
-### ⚡ Evolutionary Optimization
-- Tournament selection for robust parent selection
-- Two-point crossover for feature combination
-- Bit-flip mutation with configurable probability
-- Real-time generation progress tracking
+### 🛡️ Ruthless Pruning Logic
+
+* **Pre-flight Variance Filter:** Automatically kills "Zero-Variance" columns (like constant junk) before the GA begins.
+* **Squared Redundancy Penalty:** Heavily punishes multicollinearity by squaring inter-feature correlation, forcing a diverse subset.
+* **Aggressive Sparsity Pressure:** Enforces a high cost-per-feature (0.15) to ensure only "heavy-hitters" survive.
+
+### 🔄 Industrial Preprocessing
+
+* **Automated Label Encoding:** Automatically converts categorical string targets (Yes/No, True/False) into binary integers.
+* **Target Encoding:** Handles high-cardinality categorical features using target-mean mapping.
+* **FastAPI Integration:** Asynchronous job processing with real-time generation tracking and progress monitoring.
 
 ---
 
 ## 🛠️ Tech Stack
-- **Core:** Python 3.7+
-- **ML Libraries:** scikit-learn, pandas, numpy
-- **Genetic Algorithm:** DEAP (Distributed Evolutionary Algorithms)
-- **Data Processing:** pandas DataFrame operations
-- **Optimization:** Custom correlation-based fitness function
+
+* **Core:** Python 3.9+
+* **API Framework:** FastAPI & Uvicorn
+* **Genetic Algorithm:** DEAP (Distributed Evolutionary Algorithms)
+* **ML Libraries:** scikit-learn (Random Forest, LabelEncoder)
+* **Data Processing:** pandas, numpy
 
 ---
 
 ## ⚙️ Setup Instructions
 
 ### ✅ Clone the Repository
+
 ```bash
 git clone https://github.com/Slayer9966/Feature-Selection-using-Genetic-Algorithm.git
-Feature-Selection-using-Genetic-Algorithm
+cd Feature-Selection-using-Genetic-Algorithm
+
 ```
 
----
-
 ### 🐍 Python Environment Setup
+
 ```bash
 python -m venv venv
-venv\Scripts\activate       # For Windows
+venv\Scripts\activate      # Windows
 # or
-source venv/bin/activate    # For macOS/Linux
+source venv/bin/activate   # macOS/Linux
 
 pip install -r requirements.txt
 
----
+```
 
+### ▶️ Run the Server
+
+```bash
+python server.py
 
 ```
 
-The algorithm will process your dataset and generate optimized feature subsets along with processed train/test files.
+*Access the web interface at `http://127.0.0.1:8000`.*
 
 ---
 
-## 📊 How to Use
+## 📊 Algorithm Mechanics
 
-### 📁 Prepare Your Dataset
-1. Ensure your dataset is in CSV format
-2. Have a clear target/label column
-3. Mixed data types (numerical and categorical) are supported
+### 🧬 Evolutionary Configuration
 
-### ⚙️ Configure Parameters
-```python
-# Update these variables in the script
-filepath = 'your_dataset.csv'
-target_column = 'your_target_column'
+* **Individual Encoding:** Binary representation (1 = Selected, 0 = Excluded)
+* **Selection Method:** Tournament selection (tournsize=7) for high selection pressure.
+* **Genetic Operators:** Two-point crossover and low-probability (0.02) bit-flip mutation to preserve elite sets.
 
-# Customize GA parameters (optional)
-selected_features = genetic_feature_selection(
-    X_train, y_train, feature_names,
-    n_gen=50,        # Number of generations
-    pop_size=200,    # Population size
-    cxpb=0.7,        # Crossover probability
-    mutpb=0.3        # Mutation probability
-)
-```
+### ⚖️ The Fitness Formula
 
-### 🎯 Algorithm Components
-- **Individual Encoding:** Binary representation (1=selected, 0=excluded)
-- **Fitness Function:** `fitness = Σ(correlations) - mean(inter_correlations)`
-- **Selection Method:** Tournament selection (tournsize=3)
-- **Genetic Operators:** Two-point crossover + bit-flip mutation
+The engine evaluates individuals based on a multi-objective weighted formula:
+
+
+$$Fitness = (0.6 \times RF\_Score + 0.4 \times Spearman) - (Redundancy^2 \times 8.0) - (0.15 \times N\_Features)$$
 
 ---
 
-## 📈 Output Files
+## 📈 Key Improvements (v2.0)
 
-### 📊 Generated Files
-- `processed_X_train.csv` - Processed training features
-- `processed_X_test.csv` - Processed testing features
-- `processed_y_train.csv` - Training target values
-- `processed_y_test.csv` - Testing target values
-
-### 📋 Console Output
-- Generation-by-generation progress tracking
-- Average number of features selected per generation
-- Final optimized feature subset list
-
----
-
-## 🔧 Key Functions
-
-### `load_data(filepath, target_column)`
-- Loads and preprocesses the dataset
-- Handles categorical encoding and missing values
-- Returns train-test splits and feature names
-
-### `genetic_feature_selection(X_train, y_train, feature_names, ...)`
-- Main genetic algorithm implementation
-- Returns list of optimally selected feature names
-
-### `target_encode(X, y, column)`
-- Encodes categorical variables using target mean encoding
-- Handles missing values appropriately
-
-### `evaluate(individual, ...)`
-- Custom fitness function for genetic algorithm
-- Balances feature relevance with multicollinearity penalty
-
----
-
-## 📌 Performance Notes
-- **Scalability:** Works efficiently with datasets up to 1000 features
-- **Computation Time:** Scales with population size × generations × feature count
-- **Memory Usage:** Optimized for standard RAM configurations
-- **Convergence:** Typically converges within 30-50 generations
+| Component | Old Version | Pro Version |
+| --- | --- | --- |
+| **Statistical Method** | Pearson Correlation | **Spearman Rank Correlation** |
+| **Model Awareness** | None | **Random Forest Importance** |
+| **Redundancy** | Linear Subtraction | **Squared Heavy Penalty (8.0x)** |
+| **Junk Handling** | Passive | **Pre-flight Variance Filtering** |
+| **Target Support** | Numeric Only | **Automated Label Encoding** |
 
 ---
 
 ## 🎯 Use Cases
-- **Feature Engineering:** Reduce feature dimensionality before model training
-- **Model Performance:** Improve prediction accuracy by removing noise
-- **Multicollinearity:** Eliminate highly correlated redundant features
-- **Data Science Pipelines:** Integrate into ML preprocessing workflows
 
----
-
-## 🔮 Future Enhancements
-- Support for non-linear fitness functions
-- Integration with specific ML model performance metrics
-- Parallel processing for faster execution
-- GUI interface for non-technical users
-- Support for feature importance from tree-based models
+* **Noise Reduction:** Stripping out random columns in high-dimensional datasets.
+* **Dimensionality Reduction:** Reducing model complexity for edge device deployment.
+* **Multicollinearity:** Eliminating highly correlated redundant features in housing or financial data.
+* **Discovery:** Finding non-obvious predictors using the hybrid importance engine.
 
 ---
 
 ## 📜 License
-Licensed under the [MIT License](LICENSE) — use, modify, and distribute freely.
+
+Licensed under the [MIT License](https://www.google.com/search?q=LICENSE) — use, modify, and distribute freely.
 
 ---
 
 ## 🙋‍♂️ Author
-**Your Name**  
-📍 Your Location  
-📧 your.email@example.com  
-🔗 [GitHub](https://github.com/Slayer9966) | [LinkedIn](https://www.linkedin.com/posts/faizan-ali-7b4275297_machinelearning-featureselection-geneticalgorithms-activity-7271489152624336897-gvnq?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEfDpTgBZMmz-8LKpOQTMYhhO24GPrIrPTI)
 
-📢 If you find this project helpful for your machine learning workflows or use it in research, please consider giving it a ⭐ or letting me know via email or GitHub issues!
+**Syed Muhammad Faizan Ali** 📍 Islamabad, Pakistan
+
+📧 your.email@example.com
+
+🔗 [GitHub](https://github.com/Slayer9966) | [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/posts/faizan-ali-7b4275297_machinelearning-featureselection-geneticalgorithms-activity-7271489152624336897-gvnq)
+
+📢 **Note:** This project was developed as a comprehensive 8th-semester Computer Science project at COMSATS University Islamabad.
+
+---
+
+I’ve ensured the math is rendered clearly and the features accurately reflect the code you now have. This looks like a top-tier project for your portfolio.
+
+Would you like me to help you draft a specific "Final Report" or "Conclusion" section to add to your documentation?
