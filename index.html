@@ -1,272 +1,272 @@
-<!DOCTYPEhtml>
+<!DOCTYPE html>
 
-<htmllang="en">
+<html lang="en">
 
 <head>
 
-<metacharset="UTF-8"/>
+<meta charset="UTF-8"/>
 
-<metaname="viewport"content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>GeneticFS—FeatureSelection</title>
+<title>GeneticFS — Feature Selection</title>
 
-<linkhref="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Oxanium:wght@200;400;600;800&display=swap"rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Oxanium:wght@200;400;600;800&display=swap" rel="stylesheet"/>
 
 <style>
 
-:root{
+  :root {
 
---bg:#060810;--surface:#0b0f1a;--card:#0f1520;--border:#1a2540;
+    --bg: #060810; --surface: #0b0f1a; --card: #0f1520; --border: #1a2540;
 
---accent:#00e5ff;--accent2:#7c3aed;--accent3:#10b981;
+    --accent: #00e5ff; --accent2: #7c3aed; --accent3: #10b981;
 
---danger:#ef4444;--warn:#f59e0b;--text:#c8d8f0;--muted:#4a5e80;
+    --danger: #ef4444; --warn: #f59e0b; --text: #c8d8f0; --muted: #4a5e80;
 
---glow:0020pxrgba(0,229,255,0.15);
+    --glow: 0 0 20px rgba(0,229,255,0.15);
 
-}
+  }
 
-*{box-sizing:border-box;margin:0;padding:0;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh;overflow-x:hidden;}
+  body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; font-size: 15px; min-height: 100vh; overflow-x: hidden; }
 
-body::before{
+  body::before {
 
-content:'';position:fixed;inset:0;
+    content: ''; position: fixed; inset: 0;
 
-background-image:linear-gradient(rgba(0,229,255,0.03)1px,transparent1px),linear-gradient(90deg,rgba(0,229,255,0.03)1px,transparent1px);
+    background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
 
-background-size:40px40px;pointer-events:none;z-index:0;
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
 
-}
+  }
 
-header{
+  header {
 
-position:relative;z-index:10;padding:20px40px;
+    position: relative; z-index: 10; padding: 20px 40px;
 
-border-bottom:1pxsolidvar(--border);display:flex;align-items:center;gap:16px;
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px;
 
-background:linear-gradient(180deg,rgba(0,229,255,0.04)0%,transparent100%);
+    background: linear-gradient(180deg, rgba(0,229,255,0.04) 0%, transparent 100%);
 
-}
+  }
 
-.logo-dna{width:42px;height:42px;}
+  .logo-dna { width: 42px; height: 42px; }
 
-.logo-dnasvg{width:100%;height:100%;}
+  .logo-dna svg { width: 100%; height: 100%; }
 
-headerh1{
+  header h1 {
 
-font-family:'Oxanium',monospace;font-size:26px;font-weight:800;
+    font-family: 'Oxanium', monospace; font-size: 26px; font-weight: 800;
 
-letter-spacing:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    letter-spacing: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2));
 
--webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
 
-}
+  }
 
-header.tagline{margin-left:auto;font-family:'ShareTechMono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}
+  header .tagline { margin-left: auto; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
 
-.container{
+  .container {
 
-position:relative;z-index:1;max-width:1200px;margin:0auto;
+    position: relative; z-index: 1; max-width: 1200px; margin: 0 auto;
 
-padding:40px24px;display:grid;grid-template-columns:380px1fr;gap:24px;align-items:start;
+    padding: 40px 24px; display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start;
 
-}
+  }
 
-.card{background:var(--card);border:1pxsolidvar(--border);border-radius:2px;position:relative;overflow:hidden;}
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 2px; position: relative; overflow: hidden; }
 
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),transparent);}
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent2), var(--accent), transparent); }
 
-.card-header{padding:16px20px;border-bottom:1pxsolidvar(--border);display:flex;align-items:center;gap:10px;}
+  .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
 
-.card-header.icon{font-size:18px;opacity:0.8;}
+  .card-header .icon { font-size: 18px; opacity: 0.8; }
 
-.card-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+  .card-title { font-family: 'Oxanium', monospace; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
 
-.card-body{padding:20px;}
+  .card-body { padding: 20px; }
 
-.upload-zone{
+  .upload-zone {
 
-border:1pxdashedvar(--border);border-radius:2px;padding:36px20px;
+    border: 1px dashed var(--border); border-radius: 2px; padding: 36px 20px;
 
-text-align:center;cursor:pointer;transition:all0.2s;position:relative;
+    text-align: center; cursor: pointer; transition: all 0.2s; position: relative;
 
-}
+  }
 
-.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(0,229,255,0.04);}
+  .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: rgba(0,229,255,0.04); }
 
-.upload-zoneinput[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
-.upload-icon{font-size:32px;margin-bottom:10px;}
+  .upload-icon { font-size: 32px; margin-bottom: 10px; }
 
-.upload-text{font-size:14px;color:var(--muted);line-height:1.6;}
+  .upload-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-.upload-textstrong{color:var(--accent);}
+  .upload-text strong { color: var(--accent); }
 
-label{display:block;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 
-select,input[type=number]{
+  select, input[type=number] {
 
-width:100%;background:var(--surface);border:1pxsolidvar(--border);
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
 
-color:var(--text);padding:9px12px;font-family:'ShareTechMono',monospace;
+    color: var(--text); padding: 9px 12px; font-family: 'Share Tech Mono', monospace;
 
-font-size:13px;border-radius:2px;outline:none;transition:border-color0.2s;appearance:none;
+    font-size: 13px; border-radius: 2px; outline: none; transition: border-color 0.2s; appearance: none;
 
-}
+  }
 
-select:focus,input[type=number]:focus{border-color:var(--accent);box-shadow:var(--glow);}
+  select:focus, input[type=number]:focus { border-color: var(--accent); box-shadow: var(--glow); }
 
-.form-row{margin-bottom:14px;}
+  .form-row { margin-bottom: 14px; }
 
-.form-grid{display:grid;grid-template-columns:1fr1fr;gap:12px;}
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-.task-toggle{display:flex;}
+  .task-toggle { display: flex; }
 
-.task-toggleinput{display:none;}
+  .task-toggle input { display: none; }
 
-.task-togglelabel{
+  .task-toggle label {
 
-flex:1;padding:9px;text-align:center;cursor:pointer;
+    flex: 1; padding: 9px; text-align: center; cursor: pointer;
 
-border:1pxsolidvar(--border);font-size:12px;letter-spacing:1px;
+    border: 1px solid var(--border); font-size: 12px; letter-spacing: 1px;
 
-color:var(--muted);transition:all0.2s;margin:0;text-transform:uppercase;
+    color: var(--muted); transition: all 0.2s; margin: 0; text-transform: uppercase;
 
-}
+  }
 
-.task-togglelabel:first-of-type{border-radius:2px002px;}
+  .task-toggle label:first-of-type { border-radius: 2px 0 0 2px; }
 
-.task-togglelabel:last-of-type{border-radius:02px2px0;border-left:none;}
+  .task-toggle label:last-of-type { border-radius: 0 2px 2px 0; border-left: none; }
 
-.task-toggleinput:checked+label{background:rgba(0,229,255,0.1);border-color:var(--accent);color:var(--accent);}
+  .task-toggle input:checked + label { background: rgba(0,229,255,0.1); border-color: var(--accent); color: var(--accent); }
 
-input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none;}
+  input[type=range] { flex: 1; -webkit-appearance: none; height: 3px; background: var(--border); border-radius: 2px; outline: none; }
 
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;box-shadow:008pxvar(--accent);}
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px var(--accent); }
 
-.btn-run{
+  .btn-run {
 
-width:100%;padding:14px;background:transparent;border:1pxsolidvar(--accent);
+    width: 100%; padding: 14px; background: transparent; border: 1px solid var(--accent);
 
-color:var(--accent);font-family:'Oxanium',monospace;font-size:14px;font-weight:700;
+    color: var(--accent); font-family: 'Oxanium', monospace; font-size: 14px; font-weight: 700;
 
-letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:2px;
+    letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 2px;
 
-position:relative;overflow:hidden;transition:all0.3s;
+    position: relative; overflow: hidden; transition: all 0.3s;
 
-}
+  }
 
-.btn-run::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateX(-100%);transition:transform0.3s;z-index:0;}
+  .btn-run::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: translateX(-100%); transition: transform 0.3s; z-index: 0; }
 
-.btn-run:hover::before{transform:translateX(0);}
+  .btn-run:hover::before { transform: translateX(0); }
 
-.btn-run:hover{color:var(--bg);}
+  .btn-run:hover { color: var(--bg); }
 
-.btn-runspan{position:relative;z-index:1;}
+  .btn-run span { position: relative; z-index: 1; }
 
-.btn-run:disabled{opacity:0.4;cursor:not-allowed;}
+  .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.dataset-info{display:none;background:var(--surface);border:1pxsolidvar(--border);padding:12px14px;border-radius:2px;margin-top:12px;}
+  .dataset-info { display: none; background: var(--surface); border: 1px solid var(--border); padding: 12px 14px; border-radius: 2px; margin-top: 12px; }
 
-.dataset-info.show{display:block;}
+  .dataset-info.show { display: block; }
 
-.info-row{display:flex;justify-content:space-between;font-size:12px;padding:3px0;}
+  .info-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
 
-.info-row.key{color:var(--muted);font-family:'ShareTechMono',monospace;font-size:11px;}
+  .info-row .key { color: var(--muted); font-family: 'Share Tech Mono', monospace; font-size: 11px; }
 
-.info-row.val{color:var(--accent3);font-family:'ShareTechMono',monospace;font-size:11px;}
+  .info-row .val { color: var(--accent3); font-family: 'Share Tech Mono', monospace; font-size: 11px; }
 
-.right-panel{display:flex;flex-direction:column;gap:20px;}
+  .right-panel { display: flex; flex-direction: column; gap: 20px; }
 
-.progress-section{display:none;}
+  .progress-section { display: none; }
 
-.progress-section.show{display:block;}
+  .progress-section.show { display: block; }
 
-.progress-bar-wrap{background:var(--surface);height:6px;border-radius:2px;overflow:hidden;margin:12px0;}
+  .progress-bar-wrap { background: var(--surface); height: 6px; border-radius: 2px; overflow: hidden; margin: 12px 0; }
 
-.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width0.5sease;box-shadow:0012pxvar(--accent);}
+  .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent2), var(--accent)); transition: width 0.5s ease; box-shadow: 0 0 12px var(--accent); }
 
-.progress-label{font-family:'ShareTechMono',monospace;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;}
+  .progress-label { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
 
-.gen-chart{width:100%;height:160px;background:var(--surface);border:1pxsolidvar(--border);border-radius:2px;position:relative;overflow:hidden;}
+  .gen-chart { width: 100%; height: 160px; background: var(--surface); border: 1px solid var(--border); border-radius: 2px; position: relative; overflow: hidden; }
 
-.gen-chartcanvas{position:absolute;inset:0;}
+  .gen-chart canvas { position: absolute; inset: 0; }
 
-.results-section{display:none;}
+  .results-section { display: none; }
 
-.results-section.show{display:block;}
+  .results-section.show { display: block; }
 
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
 
-.stat-box{background:var(--surface);border:1pxsolidvar(--border);padding:14px;border-radius:2px;text-align:center;}
+  .stat-box { background: var(--surface); border: 1px solid var(--border); padding: 14px; border-radius: 2px; text-align: center; }
 
-.stat-box.stat-val{font-family:'Oxanium',monospace;font-size:28px;font-weight:800;color:var(--accent);}
+  .stat-box .stat-val { font-family: 'Oxanium', monospace; font-size: 28px; font-weight: 800; color: var(--accent); }
 
-.stat-box.stat-lbl{font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:4px;}
+  .stat-box .stat-lbl { font-size: 10px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
 
-.feature-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+  .feature-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
 
-.feat-tag{
+  .feat-tag {
 
-background:rgba(124,58,237,0.15);border:1pxsolidrgba(124,58,237,0.4);
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.4);
 
-color:#a78bfa;padding:5px11px;border-radius:2px;
+    color: #a78bfa; padding: 5px 11px; border-radius: 2px;
 
-font-family:'ShareTechMono',monospace;font-size:11px;letter-spacing:0.5px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.5px;
 
-animation:tagIn0.3seaseboth;
+    animation: tagIn 0.3s ease both;
 
-}
+  }
 
-@keyframestagIn{from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);}}
+  @keyframes tagIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
 
-.score-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(16,185,129,0.1);border:1pxsolidrgba(16,185,129,0.4);padding:10px16px;border-radius:2px;}
+  .score-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.4); padding: 10px 16px; border-radius: 2px; }
 
-.score-badge.sb-val{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;color:var(--accent3);}
+  .score-badge .sb-val { font-family: 'Oxanium', monospace; font-size: 22px; font-weight: 800; color: var(--accent3); }
 
-.score-badge.sb-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+  .score-badge .sb-lbl { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
-.log-table{width:100%;border-collapse:collapse;font-family:'ShareTechMono',monospace;font-size:11px;}
+  .log-table { width: 100%; border-collapse: collapse; font-family: 'Share Tech Mono', monospace; font-size: 11px; }
 
-.log-tableth{text-align:left;padding:7px10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;border-bottom:1pxsolidvar(--border);}
+  .log-table th { text-align: left; padding: 7px 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
 
-.log-tabletd{padding:5px10px;border-bottom:1pxsolidrgba(26,37,64,0.5);color:var(--text);}
+  .log-table td { padding: 5px 10px; border-bottom: 1px solid rgba(26,37,64,0.5); color: var(--text); }
 
-.log-tabletr:last-childtd{border-bottom:none;}
+  .log-table tr:last-child td { border-bottom: none; }
 
-.log-scroll{max-height:200px;overflow-y:auto;}
+  .log-scroll { max-height: 200px; overflow-y: auto; }
 
-.log-scroll::-webkit-scrollbar{width:4px;}
+  .log-scroll::-webkit-scrollbar { width: 4px; }
 
-.log-scroll::-webkit-scrollbar-thumb{background:var(--border);}
+  .log-scroll::-webkit-scrollbar-thumb { background: var(--border); }
 
-.error-box{display:none;background:rgba(239,68,68,0.1);border:1pxsolidrgba(239,68,68,0.4);color:#fca5a5;padding:12px16px;border-radius:2px;font-family:'ShareTechMono',monospace;font-size:12px;}
+  .error-box { display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 12px 16px; border-radius: 2px; font-family: 'Share Tech Mono', monospace; font-size: 12px; }
 
-.error-box.show{display:block;}
+  .error-box.show { display: block; }
 
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:8px;}
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); display: inline-block; margin-right: 8px; }
 
-.status-dot.running{background:var(--warn);animation:pulse1sinfinite;}
+  .status-dot.running { background: var(--warn); animation: pulse 1s infinite; }
 
-.status-dot.done{background:var(--accent3);}
+  .status-dot.done { background: var(--accent3); }
 
-.status-dot.error{background:var(--danger);}
+  .status-dot.error { background: var(--danger); }
 
-@keyframespulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.regression-info{background:rgba(16,185,129,0.07);border:1pxsolidrgba(16,185,129,0.3);padding:12px14px;border-radius:2px;display:none;font-size:13px;line-height:1.6;color:#6ee7b7;margin-top:10px;}
+  .regression-info { background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.3); padding: 12px 14px; border-radius: 2px; display: none; font-size: 13px; line-height: 1.6; color: #6ee7b7; margin-top: 10px; }
 
-.regression-info.show{display:block;}
+  .regression-info.show { display: block; }
 
-.regression-infostrong{color:var(--accent3);}
+  .regression-info strong { color: var(--accent3); }
 
-@keyframesscanline{0%{transform:translateY(-100%);}100%{transform:translateY(100vh);}}
+  @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
 
-.scanline{position:fixed;left:0;right:0;height:2px;background:linear-gradient(transparent,rgba(0,229,255,0.05),transparent);animation:scanline8slinearinfinite;pointer-events:none;z-index:999;}
+  .scanline { position: fixed; left: 0; right: 0; height: 2px; background: linear-gradient(transparent, rgba(0,229,255,0.05), transparent); animation: scanline 8s linear infinite; pointer-events: none; z-index: 999; }
 
-@media(max-width:900px){.container{grid-template-columns:1fr;}.stat-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .stat-grid { grid-template-columns: repeat(2,1fr); } }
 
 </style>
 
@@ -274,351 +274,351 @@ animation:tagIn0.3seaseboth;
 
 <body>
 
-<divclass="scanline"></div>
+<div class="scanline"></div>
 
 <header>
 
-<divclass="logo-dna">
+  <div class="logo-dna">
 
-<svgviewBox="004242"fill="none"xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-<pathd="M144Q2110284"stroke="#00e5ff"stroke-width="1.5"fill="none"/>
+      <path d="M14 4 Q21 10 28 4" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
 
-<pathd="M1438Q21322838"stroke="#7c3aed"stroke-width="1.5"fill="none"/>
+      <path d="M14 38 Q21 32 28 38" stroke="#7c3aed" stroke-width="1.5" fill="none"/>
 
-<pathd="M144Q8211438"stroke="#00e5ff"stroke-width="1.5"fill="none"stroke-dasharray="23"/>
+      <path d="M14 4 Q8 21 14 38" stroke="#00e5ff" stroke-width="1.5" fill="none" stroke-dasharray="2 3"/>
 
-<pathd="M284Q34212838"stroke="#7c3aed"stroke-width="1.5"fill="none"stroke-dasharray="23"/>
+      <path d="M28 4 Q34 21 28 38" stroke="#7c3aed" stroke-width="1.5" fill="none" stroke-dasharray="2 3"/>
 
-<linex1="14"y1="13"x2="28"y2="13"stroke="#00e5ff"stroke-width="1"opacity="0.6"/>
+      <line x1="14" y1="13" x2="28" y2="13" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
 
-<linex1="11"y1="21"x2="31"y2="21"stroke="#a78bfa"stroke-width="1"opacity="0.6"/>
+      <line x1="11" y1="21" x2="31" y2="21" stroke="#a78bfa" stroke-width="1" opacity="0.6"/>
 
-<linex1="14"y1="29"x2="28"y2="29"stroke="#7c3aed"stroke-width="1"opacity="0.6"/>
+      <line x1="14" y1="29" x2="28" y2="29" stroke="#7c3aed" stroke-width="1" opacity="0.6"/>
 
-<circlecx="14"cy="13"r="2"fill="#00e5ff"/>
+      <circle cx="14" cy="13" r="2" fill="#00e5ff"/>
 
-<circlecx="28"cy="13"r="2"fill="#00e5ff"/>
+      <circle cx="28" cy="13" r="2" fill="#00e5ff"/>
 
-<circlecx="11"cy="21"r="2"fill="#a78bfa"/>
+      <circle cx="11" cy="21" r="2" fill="#a78bfa"/>
 
-<circlecx="31"cy="21"r="2"fill="#a78bfa"/>
+      <circle cx="31" cy="21" r="2" fill="#a78bfa"/>
 
-<circlecx="14"cy="29"r="2"fill="#7c3aed"/>
+      <circle cx="14" cy="29" r="2" fill="#7c3aed"/>
 
-<circlecx="28"cy="29"r="2"fill="#7c3aed"/>
+      <circle cx="28" cy="29" r="2" fill="#7c3aed"/>
 
-</svg>
+    </svg>
 
-</div>
+  </div>
 
-<h1>GeneticFS</h1>
+  <h1>GeneticFS</h1>
 
-<spanclass="tagline">EVOLUTIONARYFEATURESELECTIONENGINEv1.0</span>
+  <span class="tagline">EVOLUTIONARY FEATURE SELECTION ENGINE v1.0</span>
 
 </header>
 
-<divclass="container">
+<div class="container">
 
-<divstyle="display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-direction:column;gap:20px;">
 
-<divclass="card">
+    <div class="card">
 
-<divclass="card-header"><spanclass="icon">⬆</span><spanclass="card-title">DatasetUpload</span></div>
+      <div class="card-header"><span class="icon">⬆</span><span class="card-title">Dataset Upload</span></div>
 
-<divclass="card-body">
+      <div class="card-body">
 
-<divclass="upload-zone"id="uploadZone">
+        <div class="upload-zone" id="uploadZone">
 
-<inputtype="file"id="fileInput"accept=".csv"/>
+          <input type="file" id="fileInput" accept=".csv"/>
 
-<divclass="upload-icon">📊</div>
+          <div class="upload-icon">📊</div>
 
-<divclass="upload-text"><strong>DropCSVfilehere</strong><br>orclicktobrowse</div>
+          <div class="upload-text"><strong>Drop CSV file here</strong><br>or click to browse</div>
 
-</div>
+        </div>
 
-<divclass="dataset-info"id="datasetInfo">
+        <div class="dataset-info" id="datasetInfo">
 
-<divclass="info-row"><spanclass="key">FILE</span><spanclass="val"id="infoFile">—</span></div>
+          <div class="info-row"><span class="key">FILE</span><span class="val" id="infoFile">—</span></div>
 
-<divclass="info-row"><spanclass="key">ROWS</span><spanclass="val"id="infoRows">—</span></div>
+          <div class="info-row"><span class="key">ROWS</span><span class="val" id="infoRows">—</span></div>
 
-<divclass="info-row"><spanclass="key">COLUMNS</span><spanclass="val"id="infoCols">—</span></div>
+          <div class="info-row"><span class="key">COLUMNS</span><span class="val" id="infoCols">—</span></div>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-<divclass="card">
+    <div class="card">
 
-<divclass="card-header"><spanclass="icon">⚙</span><spanclass="card-title">Configuration</span></div>
+      <div class="card-header"><span class="icon">⚙</span><span class="card-title">Configuration</span></div>
 
-<divclass="card-body">
+      <div class="card-body">
 
-<divclass="form-row">
+        <div class="form-row">
 
-<label>TargetColumn</label>
+          <label>Target Column</label>
 
-<selectid="targetCol"><optionvalue="">—uploaddatasetfirst—</option></select>
+          <select id="targetCol"><option value="">— upload dataset first —</option></select>
 
-</div>
+        </div>
 
-<divclass="form-row">
+        <div class="form-row">
 
-<label>TaskType</label>
+          <label>Task Type</label>
 
-<divclass="task-toggle">
+          <div class="task-toggle">
 
-<inputtype="radio"name="task"id="taskClass"value="classification"checked/>
+            <input type="radio" name="task" id="taskClass" value="classification" checked/>
 
-<labelfor="taskClass">Classification</label>
+            <label for="taskClass">Classification</label>
 
-<inputtype="radio"name="task"id="taskReg"value="regression"/>
+            <input type="radio" name="task" id="taskReg" value="regression"/>
 
-<labelfor="taskReg">Regression</label>
+            <label for="taskReg">Regression</label>
 
-</div>
+          </div>
 
-<divclass="regression-info"id="regInfo">
+          <div class="regression-info" id="regInfo">
 
-✅<strong>Yes,thisworksforregression!</strong>TheGAusescorrelation-basedfitness(Pearson|r|)whichisvalidforbothtasks.Validationscoreshows<strong>R²</strong>insteadofaccuracy.
+            ✅ <strong>Yes, this works for regression!</strong> The GA uses correlation-based fitness (Pearson |r|) which is valid for both tasks. Validation score shows <strong>R²</strong> instead of accuracy.
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-<divclass="form-grid">
+        <div class="form-grid">
 
-<divclass="form-row">
+          <div class="form-row">
 
-<label>Generations</label>
+            <label>Generations</label>
 
-<inputtype="number"id="nGen"value="50"min="5"max="200"/>
+            <input type="number" id="nGen" value="50" min="5" max="200"/>
 
-</div>
+          </div>
 
-<divclass="form-row">
+          <div class="form-row">
 
-<label>Population</label>
+            <label>Population</label>
 
-<inputtype="number"id="popSize"value="200"min="20"max="500"/>
+            <input type="number" id="popSize" value="200" min="20" max="500"/>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-<divclass="form-row">
+        <div class="form-row">
 
-<label>CrossoverRate—<spanid="cxVal">0.70</span></label>
+          <label>Crossover Rate — <span id="cxVal">0.70</span></label>
 
-<inputtype="range"id="cxpb"min="0.1"max="1.0"step="0.05"value="0.7"oninput="document.getElementById('cxVal').textContent=parseFloat(this.value).toFixed(2)"/>
+          <input type="range" id="cxpb" min="0.1" max="1.0" step="0.05" value="0.7" oninput="document.getElementById('cxVal').textContent=parseFloat(this.value).toFixed(2)"/>
 
-</div>
+        </div>
 
-<divclass="form-row">
+        <div class="form-row">
 
-<label>MutationRate—<spanid="mutVal">0.30</span></label>
+          <label>Mutation Rate — <span id="mutVal">0.30</span></label>
 
-<inputtype="range"id="mutpb"min="0.01"max="0.8"step="0.01"value="0.3"oninput="document.getElementById('mutVal').textContent=parseFloat(this.value).toFixed(2)"/>
+          <input type="range" id="mutpb" min="0.01" max="0.8" step="0.01" value="0.3" oninput="document.getElementById('mutVal').textContent=parseFloat(this.value).toFixed(2)"/>
 
-</div>
+        </div>
 
-<buttonclass="btn-run"id="runBtn"disabledonclick="runGA()"><span>▶EVOLVEFEATURES</span></button>
+        <button class="btn-run" id="runBtn" disabled onclick="runGA()"><span>▶ EVOLVE FEATURES</span></button>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-</div>
+  </div>
 
-<divclass="right-panel">
+  <div class="right-panel">
 
-<divclass="card"id="placeholder">
+    <div class="card" id="placeholder">
 
-<divclass="card-body"style="text-align:center;padding:60px20px;">
+      <div class="card-body" style="text-align:center;padding:60px 20px;">
 
-<divstyle="font-size:48px;margin-bottom:16px;opacity:0.3;">🧬</div>
+        <div style="font-size:48px;margin-bottom:16px;opacity:0.3;">🧬</div>
 
-<divstyle="font-family:'Oxanium',monospace;font-size:14px;color:var(--muted);letter-spacing:2px;">UPLOADDATASET&amp;CONFIGURETOBEGIN</div>
+        <div style="font-family:'Oxanium',monospace;font-size:14px;color:var(--muted);letter-spacing:2px;">UPLOAD DATASET &amp; CONFIGURE TO BEGIN</div>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-<divclass="cardprogress-section"id="progressSection">
+    <div class="card progress-section" id="progressSection">
 
-<divclass="card-header">
+      <div class="card-header">
 
-<spanclass="status-dot"id="statusDot"></span>
+        <span class="status-dot" id="statusDot"></span>
 
-<spanclass="card-title"id="statusLabel">Initializing...</span>
+        <span class="card-title" id="statusLabel">Initializing...</span>
 
-<spanstyle="margin-left:auto;font-family:'ShareTechMono',monospace;font-size:12px;color:var(--muted)"id="progressPct">0%</span>
+        <span style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)" id="progressPct">0%</span>
 
-</div>
+      </div>
 
-<divclass="card-body">
+      <div class="card-body">
 
-<divclass="progress-bar-wrap"><divclass="progress-bar"id="progressBar"></div></div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
-<divclass="gen-chart"id="chartWrap"><canvasid="fitnessChart"></canvas></div>
+        <div class="gen-chart" id="chartWrap"><canvas id="fitnessChart"></canvas></div>
 
-<divclass="progress-label"style="margin-top:8px">
+        <div class="progress-label" style="margin-top:8px">
 
-<span>FITNESSOVERGENERATIONS</span><spanid="genCounter">GEN0</span>
+          <span>FITNESS OVER GENERATIONS</span><span id="genCounter">GEN 0</span>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-<divclass="error-box"id="errorBox"></div>
+    <div class="error-box" id="errorBox"></div>
 
-<divclass="cardresults-section"id="resultsSection">
+    <div class="card results-section" id="resultsSection">
 
-<divclass="card-header"><spanclass="icon">✦</span><spanclass="card-title">SelectionResults</span></div>
+      <div class="card-header"><span class="icon">✦</span><span class="card-title">Selection Results</span></div>
 
-<divclass="card-body">
+      <div class="card-body">
 
-<divclass="stat-grid">
+        <div class="stat-grid">
 
-<divclass="stat-box"><divclass="stat-val"id="resSelected">—</div><divclass="stat-lbl">Selected</div></div>
+          <div class="stat-box"><div class="stat-val" id="resSelected">—</div><div class="stat-lbl">Selected</div></div>
 
-<divclass="stat-box"><divclass="stat-val"id="resTotal">—</div><divclass="stat-lbl">Total</div></div>
+          <div class="stat-box"><div class="stat-val" id="resTotal">—</div><div class="stat-lbl">Total</div></div>
 
-<divclass="stat-box"><divclass="stat-val"id="resReduced"style="color:var(--accent3)">—</div><divclass="stat-lbl">Reduction</div></div>
+          <div class="stat-box"><div class="stat-val" id="resReduced" style="color:var(--accent3)">—</div><div class="stat-lbl">Reduction</div></div>
 
-</div>
+        </div>
 
-<divid="scoreWrap"style="margin-bottom:16px;display:none;">
+        <div id="scoreWrap" style="margin-bottom:16px;display:none;">
 
-<divclass="score-badge">
+          <div class="score-badge">
 
-<div><divclass="sb-val"id="scoreVal">—</div><divclass="sb-lbl"id="scoreLbl">Score</div></div>
+            <div><div class="sb-val" id="scoreVal">—</div><div class="sb-lbl" id="scoreLbl">Score</div></div>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-<labelstyle="margin-bottom:10px">SelectedFeatures</label>
+        <label style="margin-bottom:10px">Selected Features</label>
 
-<divclass="feature-cloud"id="featureCloud"></div>
+        <div class="feature-cloud" id="featureCloud"></div>
 
-<divstyle="margin-top:20px">
+        <div style="margin-top:20px">
 
-<labelstyle="margin-bottom:8px">GenerationLog</label>
+          <label style="margin-bottom:8px">Generation Log</label>
 
-<divclass="log-scroll">
+          <div class="log-scroll">
 
-<tableclass="log-table">
+            <table class="log-table">
 
-<thead><tr><th>GEN</th><th>BESTFITNESS</th><th>AVGFEATURES</th></tr></thead>
+              <thead><tr><th>GEN</th><th>BEST FITNESS</th><th>AVG FEATURES</th></tr></thead>
 
-<tbodyid="logBody"></tbody>
+              <tbody id="logBody"></tbody>
 
-</table>
+            </table>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-</div>
+  </div>
 
 </div>
 
 <script>
 
-letfileContent=null,jobId=null,pollInterval=null,chartData=[];
+let fileContent=null,jobId=null,pollInterval=null,chartData=[];
 
-functiondrawChart(){
+function drawChart(){
 
-constcanvas=document.getElementById('fitnessChart'),wrap=document.getElementById('chartWrap');
+  const canvas=document.getElementById('fitnessChart'),wrap=document.getElementById('chartWrap');
 
-canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
+  canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
 
-constctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
 
-if(chartData.length<2)return;
+  if(chartData.length<2)return;
 
-constpad={t:10,r:10,b:20,l:40},w=canvas.width-pad.l-pad.r,h=canvas.height-pad.t-pad.b;
+  const pad={t:10,r:10,b:20,l:40},w=canvas.width-pad.l-pad.r,h=canvas.height-pad.t-pad.b;
 
-constminF=Math.min(...chartData.map(d=>d.best_fitness)),maxF=Math.max(...chartData.map(d=>d.best_fitness)),range=maxF-minF||1;
+  const minF=Math.min(...chartData.map(d=>d.best_fitness)),maxF=Math.max(...chartData.map(d=>d.best_fitness)),range=maxF-minF||1;
 
-consttoX=i=>pad.l+(i/(chartData.length-1))*w,toY=v=>pad.t+h-((v-minF)/range)*h;
+  const toX=i=>pad.l+(i/(chartData.length-1))*w,toY=v=>pad.t+h-((v-minF)/range)*h;
 
-ctx.strokeStyle='rgba(26,37,64,0.8)';ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(26,37,64,0.8)';ctx.lineWidth=1;
 
-for(leti=0;i<=4;i++){
+  for(let i=0;i<=4;i++){
 
-consty=pad.t+(i/4)*h;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+w,y);ctx.stroke();
+    const y=pad.t+(i/4)*h;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+w,y);ctx.stroke();
 
-ctx.fillStyle='#4a5e80';ctx.font='10pxShareTechMono';ctx.fillText((maxF-(i/4)*range).toFixed(2),2,y+4);
+    ctx.fillStyle='#4a5e80';ctx.font='10px Share Tech Mono';ctx.fillText((maxF-(i/4)*range).toFixed(2),2,y+4);
+
+  }
+
+  const grad=ctx.createLinearGradient(0,pad.t,0,pad.t+h);
+
+  grad.addColorStop(0,'rgba(0,229,255,0.2)');grad.addColorStop(1,'rgba(0,229,255,0)');
+
+  ctx.beginPath();ctx.moveTo(toX(0),toY(chartData[0].best_fitness));
+
+  chartData.forEach((d,i)=>ctx.lineTo(toX(i),toY(d.best_fitness)));
+
+  ctx.lineTo(toX(chartData.length-1),pad.t+h);ctx.lineTo(toX(0),pad.t+h);ctx.closePath();
+
+  ctx.fillStyle=grad;ctx.fill();
+
+  ctx.beginPath();ctx.strokeStyle='#00e5ff';ctx.lineWidth=2;ctx.shadowColor='#00e5ff';ctx.shadowBlur=8;
+
+  chartData.forEach((d,i)=>i===0?ctx.moveTo(toX(i),toY(d.best_fitness)):ctx.lineTo(toX(i),toY(d.best_fitness)));
+
+  ctx.stroke();ctx.shadowBlur=0;
 
 }
 
-constgrad=ctx.createLinearGradient(0,pad.t,0,pad.t+h);
+document.getElementById('fileInput').addEventListener('change',async e=>{
 
-grad.addColorStop(0,'rgba(0,229,255,0.2)');grad.addColorStop(1,'rgba(0,229,255,0)');
+  const file=e.target.files[0];if(!file)return;
 
-ctx.beginPath();ctx.moveTo(toX(0),toY(chartData[0].best_fitness));
+  const form=new FormData();form.append('file',file);
 
-chartData.forEach((d,i)=>ctx.lineTo(toX(i),toY(d.best_fitness)));
+  try{
 
-ctx.lineTo(toX(chartData.length-1),pad.t+h);ctx.lineTo(toX(0),pad.t+h);ctx.closePath();
+    const res=await fetch('/upload',{method:'POST',body:form});
 
-ctx.fillStyle=grad;ctx.fill();
+    const data=await res.json();
 
-ctx.beginPath();ctx.strokeStyle='#00e5ff';ctx.lineWidth=2;ctx.shadowColor='#00e5ff';ctx.shadowBlur=8;
+    if(data.error){alert(data.error);return;}
 
-chartData.forEach((d,i)=>i===0?ctx.moveTo(toX(i),toY(d.best_fitness)):ctx.lineTo(toX(i),toY(d.best_fitness)));
+    fileContent=data.file_content;
 
-ctx.stroke();ctx.shadowBlur=0;
+    document.getElementById('infoFile').textContent=file.name;
 
-}
+    document.getElementById('infoRows').textContent=data.rows.toLocaleString();
 
-document.getElementById('fileInput').addEventListener('change',asynce=>{
+    document.getElementById('infoCols').textContent=data.columns.length;
 
-constfile=e.target.files[0];if(!file)return;
+    document.getElementById('datasetInfo').classList.add('show');
 
-constform=newFormData();form.append('file',file);
+    const sel=document.getElementById('targetCol');
 
-try{
+    sel.innerHTML=data.columns.map(c=>`<option value="${c}">${c}</option>`).join('');
 
-constres=awaitfetch('/upload',{method:'POST',body:form});
+    document.getElementById('runBtn').disabled=false;
 
-constdata=awaitres.json();
-
-if(data.error){alert(data.error);return;}
-
-fileContent=data.file_content;
-
-document.getElementById('infoFile').textContent=file.name;
-
-document.getElementById('infoRows').textContent=data.rows.toLocaleString();
-
-document.getElementById('infoCols').textContent=data.columns.length;
-
-document.getElementById('datasetInfo').classList.add('show');
-
-constsel=document.getElementById('targetCol');
-
-sel.innerHTML=data.columns.map(c=>`<optionvalue="${c}">${c}</option>`).join('');
-
-document.getElementById('runBtn').disabled=false;
-
-}catch(err){alert('Uploadfailed:'+err.message);}
+  }catch(err){alert('Upload failed: '+err.message);}
 
 });
 
-constzone=document.getElementById('uploadZone');
+const zone=document.getElementById('uploadZone');
 
 zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
 
@@ -626,141 +626,141 @@ zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
 
 zone.addEventListener('drop',e=>{
 
-e.preventDefault();zone.classList.remove('drag-over');
+  e.preventDefault();zone.classList.remove('drag-over');
 
-constfile=e.dataTransfer.files[0];
+  const file=e.dataTransfer.files[0];
 
-if(file){constdt=newDataTransfer();dt.items.add(file);document.getElementById('fileInput').files=dt.files;document.getElementById('fileInput').dispatchEvent(newEvent('change'));}
+  if(file){const dt=new DataTransfer();dt.items.add(file);document.getElementById('fileInput').files=dt.files;document.getElementById('fileInput').dispatchEvent(new Event('change'));}
 
 });
 
 document.querySelectorAll('input[name=task]').forEach(r=>r.addEventListener('change',()=>document.getElementById('regInfo').classList.toggle('show',r.value==='regression'&&r.checked)));
 
-asyncfunctionrunGA(){
+async function runGA(){
 
-if(!fileContent)return;
+  if(!fileContent)return;
 
-clearInterval(pollInterval);chartData=[];
+  clearInterval(pollInterval);chartData=[];
 
-document.getElementById('placeholder').style.display='none';
+  document.getElementById('placeholder').style.display='none';
 
-document.getElementById('progressSection').classList.add('show');
+  document.getElementById('progressSection').classList.add('show');
 
-document.getElementById('resultsSection').classList.remove('show');
+  document.getElementById('resultsSection').classList.remove('show');
 
-document.getElementById('errorBox').classList.remove('show');
+  document.getElementById('errorBox').classList.remove('show');
 
-document.getElementById('statusDot').className='status-dotrunning';
+  document.getElementById('statusDot').className='status-dot running';
 
-document.getElementById('statusLabel').textContent='RunningGeneticAlgorithm...';
+  document.getElementById('statusLabel').textContent='Running Genetic Algorithm...';
 
-document.getElementById('progressBar').style.width='0%';
+  document.getElementById('progressBar').style.width='0%';
 
-document.getElementById('progressPct').textContent='0%';
+  document.getElementById('progressPct').textContent='0%';
 
-document.getElementById('logBody').innerHTML='';
+  document.getElementById('logBody').innerHTML='';
 
-document.getElementById('runBtn').disabled=true;
+  document.getElementById('runBtn').disabled=true;
 
-constform=newFormData();
+  const form=new FormData();
 
-form.append('file_content',fileContent);
+  form.append('file_content',fileContent);
 
-form.append('target_column',document.getElementById('targetCol').value);
+  form.append('target_column',document.getElementById('targetCol').value);
 
-form.append('task_type',document.querySelector('input[name=task]:checked').value);
+  form.append('task_type',document.querySelector('input[name=task]:checked').value);
 
-form.append('n_gen',document.getElementById('nGen').value);
+  form.append('n_gen',document.getElementById('nGen').value);
 
-form.append('pop_size',document.getElementById('popSize').value);
+  form.append('pop_size',document.getElementById('popSize').value);
 
-form.append('cxpb',document.getElementById('cxpb').value);
+  form.append('cxpb',document.getElementById('cxpb').value);
 
-form.append('mutpb',document.getElementById('mutpb').value);
+  form.append('mutpb',document.getElementById('mutpb').value);
 
-try{
+  try{
 
-constres=awaitfetch('/run',{method:'POST',body:form});
+    const res=await fetch('/run',{method:'POST',body:form});
 
-constdata=awaitres.json();
+    const data=await res.json();
 
-if(data.error){showError(data.error);return;}
+    if(data.error){showError(data.error);return;}
 
-jobId=data.job_id;
+    jobId=data.job_id;
 
-pollInterval=setInterval(pollStatus,1200);
+    pollInterval=setInterval(pollStatus,1200);
 
-}catch(err){showError(err.message);}
-
-}
-
-asyncfunctionpollStatus(){
-
-try{
-
-constres=awaitfetch(`/status/${jobId}`);
-
-constdata=awaitres.json();
-
-constpct=data.progress||0;
-
-document.getElementById('progressBar').style.width=pct+'%';
-
-document.getElementById('progressPct').textContent=pct+'%';
-
-if(data.generation_log&&data.generation_log.length>0){
-
-chartData=data.generation_log;
-
-constlast=chartData[chartData.length-1];
-
-document.getElementById('genCounter').textContent=`GEN${last.gen}`;
-
-drawChart();
-
-consttbody=document.getElementById('logBody');
-
-tbody.innerHTML=chartData.slice(-10).reverse().map(r=>`<tr><td>${r.gen}</td><td>${r.best_fitness}</td><td>${r.avg_features}</td></tr>`).join('');
+  }catch(err){showError(err.message);}
 
 }
 
-if(data.status==='done'){clearInterval(pollInterval);document.getElementById('statusDot').className='status-dotdone';document.getElementById('statusLabel').textContent='EvolutionComplete';document.getElementById('runBtn').disabled=false;showResults(data);}
+async function pollStatus(){
 
-elseif(data.status==='error'){clearInterval(pollInterval);showError(data.error||'Unknownerror');}
+  try{
 
-}catch(e){}
+    const res=await fetch(`/status/${jobId}`);
+
+    const data=await res.json();
+
+    const pct=data.progress||0;
+
+    document.getElementById('progressBar').style.width=pct+'%';
+
+    document.getElementById('progressPct').textContent=pct+'%';
+
+    if(data.generation_log&&data.generation_log.length>0){
+
+      chartData=data.generation_log;
+
+      const last=chartData[chartData.length-1];
+
+      document.getElementById('genCounter').textContent=`GEN ${last.gen}`;
+
+      drawChart();
+
+      const tbody=document.getElementById('logBody');
+
+      tbody.innerHTML=chartData.slice(-10).reverse().map(r=>`<tr><td>${r.gen}</td><td>${r.best_fitness}</td><td>${r.avg_features}</td></tr>`).join('');
+
+    }
+
+    if(data.status==='done'){clearInterval(pollInterval);document.getElementById('statusDot').className='status-dot done';document.getElementById('statusLabel').textContent='Evolution Complete';document.getElementById('runBtn').disabled=false;showResults(data);}
+
+    else if(data.status==='error'){clearInterval(pollInterval);showError(data.error||'Unknown error');}
+
+  }catch(e){}
 
 }
 
-functionshowResults(data){
+function showResults(data){
 
-document.getElementById('resultsSection').classList.add('show');
+  document.getElementById('resultsSection').classList.add('show');
 
-document.getElementById('resSelected').textContent=data.n_selected;
+  document.getElementById('resSelected').textContent=data.n_selected;
 
-document.getElementById('resTotal').textContent=data.n_total;
+  document.getElementById('resTotal').textContent=data.n_total;
 
-document.getElementById('resReduced').textContent=Math.round((1-data.n_selected/data.n_total)*100)+'%';
+  document.getElementById('resReduced').textContent=Math.round((1-data.n_selected/data.n_total)*100)+'%';
 
-if(data.score_value!=null){document.getElementById('scoreVal').textContent=data.score_value;document.getElementById('scoreLbl').textContent=data.score_label||'Score';document.getElementById('scoreWrap').style.display='block';}
+  if(data.score_value!=null){document.getElementById('scoreVal').textContent=data.score_value;document.getElementById('scoreLbl').textContent=data.score_label||'Score';document.getElementById('scoreWrap').style.display='block';}
 
-constcloud=document.getElementById('featureCloud');cloud.innerHTML='';
+  const cloud=document.getElementById('featureCloud');cloud.innerHTML='';
 
-data.selected_features.forEach((f,i)=>{consttag=document.createElement('div');tag.className='feat-tag';tag.style.animationDelay=(i*0.04)+'s';tag.textContent=f;cloud.appendChild(tag);});
+  data.selected_features.forEach((f,i)=>{const tag=document.createElement('div');tag.className='feat-tag';tag.style.animationDelay=(i*0.04)+'s';tag.textContent=f;cloud.appendChild(tag);});
 
 }
 
-functionshowError(msg){
+function showError(msg){
 
-document.getElementById('errorBox').textContent='⚠Error:'+msg;
+  document.getElementById('errorBox').textContent='⚠ Error: '+msg;
 
-document.getElementById('errorBox').classList.add('show');
+  document.getElementById('errorBox').classList.add('show');
 
-document.getElementById('statusDot').className='status-doterror';
+  document.getElementById('statusDot').className='status-dot error';
 
-document.getElementById('statusLabel').textContent='Error';
+  document.getElementById('statusLabel').textContent='Error';
 
-document.getElementById('runBtn').disabled=false;
+  document.getElementById('runBtn').disabled=false;
 
 }
 
