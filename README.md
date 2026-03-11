@@ -118,7 +118,7 @@ Licensed under the [MIT License](https://www.google.com/search?q=LICENSE) — us
 
 **Syed Muhammad Faizan Ali** 📍 Islamabad, Pakistan
 
-📧 your.email@example.com
+📧 faizandev666@gmail.com
 
 🔗 [GitHub](https://github.com/Slayer9966) | [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/posts/faizan-ali-7b4275297_machinelearning-featureselection-geneticalgorithms-activity-7271489152624336897-gvnq)
 
